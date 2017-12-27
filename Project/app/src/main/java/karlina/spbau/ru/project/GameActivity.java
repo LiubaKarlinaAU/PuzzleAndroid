@@ -3,6 +3,8 @@ package karlina.spbau.ru.project;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,59 +15,53 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+
+import karlina.spbau.ru.project.storageClasses.ActivityStorage;
 
 import static android.provider.MediaStore.Images.Thumbnails.getThumbnail;
 
 public class GameActivity extends AppCompatActivity {
-    private final int Pick_image = 1;
     private Bitmap bitmap;
+    private ActivityStorage storage = new ActivityStorage();
     private ImageView imageView;
-    private String path;
+    private MediaPlayer media = new MediaPlayer();
     private Uri imageUri;
-/*
-    public GameActivity() {
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+    private Uri audioUri;
 
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, Pick_image);
-    }
-*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        // TextView textView = (TextView) findViewById(R.id.textView2);
-        imageView = (ImageView)findViewById(R.id.imageView);
+        storage.loadData(this.getIntent());
 
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        imageView = (ImageView) findViewById(R.id.imageView);
 
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, Pick_image);
+        imageUri = storage.getImageUri();
 
-
-    }
-
-        @Override
-        protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent)
-        {
-            super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-
-            switch (requestCode) {
-                case Pick_image:
-
-                    if (resultCode == RESULT_OK) {
-                        try {
-                            imageUri = imageReturnedIntent.getData();
-                            final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                            bitmap = BitmapFactory.decodeStream(imageStream);
-                            //bitmap = getThumbnail(imageUri);
-                            imageView.setImageBitmap(bitmap);
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                    }
-            }
+        final InputStream imageStream;
+        try {
+            imageStream = getContentResolver().openInputStream(imageUri);
+            bitmap = BitmapFactory.decodeStream(imageStream);
+            imageView.setImageBitmap(bitmap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
+
+        audioUri = storage.getAudioUri();
+        media.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        try {
+            media.setDataSource(getApplicationContext(), audioUri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            media.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        media.start();
+    }
 }
