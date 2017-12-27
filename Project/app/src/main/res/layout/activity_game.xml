@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/gameActivity"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/game_activity"
+    tools:context="karlina.spbau.ru.project.GameActivity">
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_weight="3"
+        android:gravity="left"
+        android:textColor="#ffffffff"
+        android:textOn="@string/on"
+        android:textOff="@string/off" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="4.14"
+        android:background="#ffffffff"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/icon2" />
+
+</LinearLayout>
