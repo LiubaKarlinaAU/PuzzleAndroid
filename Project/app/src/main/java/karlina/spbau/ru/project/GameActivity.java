@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -40,16 +41,6 @@ public class GameActivity extends AppCompatActivity {
         imageView = (ImageView) findViewById(R.id.imageView);
 
         imageUri = storage.getImageUri();
-
-        final InputStream imageStream;
-        try {
-            imageStream = getContentResolver().openInputStream(imageUri);
-            bitmap = BitmapFactory.decodeStream(imageStream);
-            imageView.setImageBitmap(bitmap);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
         audioUri = storage.getAudioUri();
         media.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
@@ -63,5 +54,41 @@ public class GameActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         media.start();
+        media.setLooping(true);
+
+        Switch switchButton = (Switch) findViewById(R.id.switch_button);
+
+        //Set a CheckedChange Listener for Switch Button
+        switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged(CompoundButton cb, boolean on){
+                if(on)
+                {
+                    //Do something when Switch button is on/checked
+                    if (media != null && !media.isPlaying()) {
+                        media.start();
+                        media.setLooping(true);
+                    }
+                }
+                else
+                {
+                    //Do something when Switch is off/unchecked
+                    if(media != null && media.isPlaying())
+                    {
+                        media.stop();
+                        media.release();
+                    }
+                }
+            }
+        });
+        
+        final InputStream imageStream;
+        try {
+            imageStream = getContentResolver().openInputStream(imageUri);
+            bitmap = BitmapFactory.decodeStream(imageStream);
+            imageView.setImageBitmap(bitmap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
