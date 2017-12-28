@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/main_activity"
-    tools:context="karlina.spbau.ru.project.MainActivity">
+    tools:context="karlina.spbau.ru.project.activities.MainActivity">
 
 
     <LinearLayout

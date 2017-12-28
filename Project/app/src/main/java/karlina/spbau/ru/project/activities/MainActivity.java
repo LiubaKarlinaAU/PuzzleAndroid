@@ -1,4 +1,4 @@
-package karlina.spbau.ru.project;
+package karlina.spbau.ru.project.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import static karlina.spbau.ru.project.R.layout.activity_main;
+import karlina.spbau.ru.project.R;
 
 public class MainActivity extends AppCompatActivity {
 

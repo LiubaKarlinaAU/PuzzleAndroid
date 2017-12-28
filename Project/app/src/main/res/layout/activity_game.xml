@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/game_activity"
-    tools:context="karlina.spbau.ru.project.GameActivity">
+    tools:context="karlina.spbau.ru.project.activities.GameActivity">
 
     <Switch
         android:id="@+id/switch_button"
@@ -16,6 +16,7 @@
         android:layout_weight="3"
         android:gravity="left"
         android:textColor="#ffffffff"
+        android:checked="true"
         android:textOn="@string/on"
         android:textOff="@string/off" />
 

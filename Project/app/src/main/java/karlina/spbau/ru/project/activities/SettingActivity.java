@@ -1,4 +1,4 @@
-package karlina.spbau.ru.project;
+package karlina.spbau.ru.project.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,6 +15,7 @@ import android.widget.Toast;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+import karlina.spbau.ru.project.R;
 import karlina.spbau.ru.project.storageClasses.ActivityStorage;
 
 public class SettingActivity extends AppCompatActivity {
