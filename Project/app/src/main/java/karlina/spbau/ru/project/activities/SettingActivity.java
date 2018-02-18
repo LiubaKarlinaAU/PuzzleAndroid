@@ -20,8 +20,6 @@ import karlina.spbau.ru.project.storageClasses.ActivityStorage;
 
 public class SettingActivity extends AppCompatActivity {
     private final int Pick_audio = 1;
-    private final int Pick_image = 2;
-    private Bitmap bitmap;
 
     private ActivityStorage storage = new ActivityStorage();
     Intent intent;
@@ -31,17 +29,6 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         intent = new Intent(SettingActivity.this, GameActivity.class);
-
-        Button imageButton = (Button) findViewById(R.id.picture_button);
-
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent imagePicker = new Intent(Intent.ACTION_PICK);
-                imagePicker.setType("image/*");
-                startActivityForResult(imagePicker, Pick_image);
-            }
-        });
 
         Button musicButton = (Button) findViewById(R.id.music_button);
 
@@ -60,11 +47,8 @@ public class SettingActivity extends AppCompatActivity {
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (storage.readyForGame()) {
-                    storage.putData(intent);
-                    bitmap.recycle();
-                    bitmap = null;
+                    storage.putDataToIntent(intent);
                     startActivity(intent);
                 } else {
                     Toast toast = Toast.makeText(getApplicationContext(),
@@ -102,20 +86,6 @@ public class SettingActivity extends AppCompatActivity {
                     storage.setAudioUri(returnedIntent.getData());
                 }
                 break;
-            case Pick_image:
-                if (resultCode == RESULT_OK) {
-                    storage.setImageUri(returnedIntent.getData());
-                    final InputStream imageStream;
-                    ImageView imageView = (ImageView) findViewById(R.id.smallImageView);
-                    try {
-                        imageStream = getContentResolver().openInputStream(storage.getImageUri());
-                        bitmap = BitmapFactory.decodeStream(imageStream);
-                        imageView.setImageBitmap(bitmap);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-
-                }
         }
     }
 }

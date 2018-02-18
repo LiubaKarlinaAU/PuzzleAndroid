@@ -41,15 +41,18 @@ public class GameActivity extends AppCompatActivity {
     private MediaPlayer media = new MediaPlayer();
     private Controller controller;
     private static boolean firstTime = true;
+    private final int Pick_image = 2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-
         storage.loadData(this.getIntent());
 
-        imageView = (ImageView) findViewById(R.id.imageView);
+        Intent imagePicker = new Intent(Intent.ACTION_PICK);
+        imagePicker.setType("image/*");
+        startActivityForResult(imagePicker, Pick_image);
 
         media.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
@@ -86,15 +89,6 @@ public class GameActivity extends AppCompatActivity {
                 }
             }
         });
-
-        final InputStream imageStream;
-        try {
-            imageStream = getContentResolver().openInputStream(storage.getImageUri());
-            imageBitmap = BitmapFactory.decodeStream(imageStream);
-            imageView.setImageBitmap(imageBitmap);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     public class MyCanvas extends View {
@@ -115,11 +109,11 @@ public class GameActivity extends AppCompatActivity {
             pText.setTextSize(20);
             canvas.drawText("Sample Text", 100, 100, pText);
             */
-            Rect rectangle = new Rect(0,0,100,100);
+            Rect rectangle = new Rect(0, 0, 100, 100);
             //canvas.drawBitmap(imageBitmap, null, rectangle, null);
         }
     }
-
+/*
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         if (firstTime) {
@@ -132,7 +126,7 @@ public class GameActivity extends AppCompatActivity {
             controller = new Controller(storage.getImageUri(), storage.getComplexity(), canvas);
             firstTime = false;
         }
-    }
+    }*/
 
 /*
     @Override
@@ -157,4 +151,26 @@ public class GameActivity extends AppCompatActivity {
 
         return true;
     } */
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent returnedIntent) {
+        super.onActivityResult(requestCode, resultCode, returnedIntent);
+
+        switch (requestCode) {
+            case Pick_image:
+                if (resultCode == RESULT_OK) {
+                    Uri imageUri = returnedIntent.getData();
+                    final InputStream imageStream;
+                    ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                    try {
+                        imageStream = getContentResolver().openInputStream(imageUri);
+                        bitmap = BitmapFactory.decodeStream(imageStream);
+                        imageView.setImageBitmap(bitmap);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+        }
+    }
 }
