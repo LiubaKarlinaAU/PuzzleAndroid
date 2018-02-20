@@ -1,41 +1,33 @@
 package karlina.spbau.ru.project.storageClasses;
 
-import android.graphics.Canvas;
-
 /**
- * Created by liuba on 28.12.17.
+ * This class is needed for representing a puzzle.
+ * It contains expected puzzle location.
  */
 
 class Puzzle {
-    private int i;
-    private int j;
-
     private int expectedI;
     private int expectedJ;
 
-    private int size;
-
-    public Puzzle(int correctX, int correctY, int size) {
+    /**
+     * Class constructor
+     *
+     * @param int correctX - first correct coordinate
+     * @param int correctY - second correct coordinate
+     */
+    public Puzzle(int correctX, int correctY) {
         this.expectedI = correctX;
         this.expectedJ = correctY;
-
-        this.size = size;
     }
 
-    public void Draw(Canvas canvas)
-    {
-
-    }
-
-    public int getI() {
-        return i;
-    }
-
-    public int getJ() {
-        return j;
-    }
-
-    public boolean isCorrect(){
+    /**
+     * Check is this puzzle on its place
+     *
+     * @param i first coordinate to make comparing
+     * @param j second coordinate to make comparing
+     * @return boolean if puzzle located on correct place
+     */
+    public boolean isCorrect(int i, int j){
         return i == expectedI && j == expectedJ;
     }
 }

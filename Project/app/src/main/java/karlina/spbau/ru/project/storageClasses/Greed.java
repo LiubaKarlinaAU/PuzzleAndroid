@@ -1,63 +1,71 @@
 package karlina.spbau.ru.project.storageClasses;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 
 /**
  * Created by liuba on 28.12.17.
  */
 
 public class Greed {
-    private int[][] greed;
-    private int size = 0;
-    private Navigator nav;
+    private Puzzle greed[][];
+    private int puzzleSize;
+    private int greedSize;
 
-    public Greed(Navigator n) {
-        nav = n;
-        size = nav.getGreedSize();
-        greed = new int[size][size];
+    public Greed(int count, int greedS) {
+        greedSize = count;
+        puzzleSize = greedS / count;
+        greed = new Puzzle[count][count];
 
-        for (int i = 0; i < size; ++i)
-            for (int j = 0; j < size; ++j)
-                greed[i][j] = -1;
+        for (int i = 0; i < count; ++i)
+            for (int j = 0; j < count; ++j) {
+                greed[i][j] = new Puzzle(count - j, count - i);
+            }
     }
 
-    public boolean isEmpty(float x, float y) {
-        return greed[nav.getI(x)][nav.getJ(y)] == -1;
+    public Bitmap getImageBitmap(int viewI, int viewJ, Bitmap bitmap) {
+        int i = viewI * puzzleSize;
+        int j = viewJ * puzzleSize;
+
+        return getPartBitmap(bitmap, i, j, i + puzzleSize, j + puzzleSize);
     }
 
-    public boolean setPuzzle(int number, float x, float y) {
-        if (isEmpty(x, y)) {
-            greed[nav.getI(x)][nav.getJ(y)] = number;
-            return true;
-        }
-
-        return false;
+    /**
+     * Get greed puzzle size
+     *
+     * @return int size in puzzles
+     */
+    public int getSize() {
+        return greedSize;
     }
 
-    public boolean setPuzzle(int number, int i, int j, float x, float y) {
-        if (isEmpty(x, y)) {
-            int i2 = nav.getI(x), j2 = nav.getJ(y);
-            greed[i2][j2] = number;
-            greed[i][j] = -1;
-            //drawCell((int) x, (int) y);
-            //drawCell(i, j);
-            return true;
-        }
 
-        return false;
+    private static Bitmap getPartBitmap(Bitmap bitmap, int x1, int y1, int x2, int y2) {
+
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(x1, y1, x2, y2);
+        final RectF rectF = new RectF(rect);
+        final float roundPx = 0;
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        return output;
     }
 
-    public int getPuzzle(float x, float y) {
-        return greed[nav.getI(x)][nav.getJ(y)];
-    }
-
-    public int getIntPuzzle(int i, int j) {
-        return greed[i][j];
-    }
-
-    public int size() {
-        return size;
-    }
 }

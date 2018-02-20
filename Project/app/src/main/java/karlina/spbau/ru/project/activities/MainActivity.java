@@ -8,8 +8,16 @@ import android.widget.Button;
 
 import karlina.spbau.ru.project.R;
 
+/**
+ * This class is representation of main activity with button play and exit.
+ */
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * Method sets listener on play and exit button
+     *
+     * @param savedInstanceState - to load previous data
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              MainActivity.super.finish();
+                MainActivity.super.finish();
             }
         });
     }

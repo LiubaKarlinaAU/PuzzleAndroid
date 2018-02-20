@@ -52,7 +52,7 @@ public class SettingStorage {
     /**
      * Check is storage ready for game
      *
-     * @return is the complexity level chosen
+     * @return boolean if the complexity level chosen
      */
     public boolean readyForGame() {
         return complexity != -1;

@@ -31,32 +31,6 @@
             android:textColor="#ffffaaff"
             android:textSize="40dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/picture_button"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"
-                android:background="#00ffffff"
-                android:text="@string/picture"
-                android:textColor="#ffffffff"
-                android:textSize="30sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/smallImageView"
-                android:layout_width="63dp"
-                android:layout_height="63dp"
-                app:srcCompat="@mipmap/ic_launcher_round" />
-
-        </LinearLayout>
-
         <Button
             android:id="@+id/level2"
             android:layout_width="wrap_content"
@@ -76,22 +50,22 @@
             android:orientation="horizontal">
 
         <RadioButton
-            android:id="@+id/level10"
+            android:id="@+id/level5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="10x10"
+            android:text="5x5"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/colorPrimary"
             android:onClick="onRadioButtonClicked"/>
 
         <RadioButton
-            android:id="@+id/level15"
+            android:id="@+id/level10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="15x15"
+            android:text="10x10"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/colorPrimary"

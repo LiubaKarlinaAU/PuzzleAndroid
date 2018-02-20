@@ -13,20 +13,19 @@
         android:id="@+id/switch_button"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_weight="3"
-        android:gravity="left"
+        android:layout_weight="1"
+        android:gravity="right"
         android:textColor="#ffffffff"
         android:checked="true"
-        android:textOn="@string/on"
-        android:textOff="@string/off" />
+        android:text="@string/on_off" />
 
-    <ImageView
-        android:id="@+id/imageView"
+    <LinearLayout
+        android:id="@+id/imageLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="4.14"
-        android:background="#ffffffff"
-        android:scaleType="centerCrop"
-        app:srcCompat="@drawable/icon2" />
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        android:layout_weight="20"
+        android:orientation="vertical">
 
+        </LinearLayout>
 </LinearLayout>

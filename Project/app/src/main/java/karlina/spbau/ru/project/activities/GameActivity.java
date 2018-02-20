@@ -1,171 +1,143 @@
 package karlina.spbau.ru.project.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
-import android.widget.TextView;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
 import karlina.spbau.ru.project.Controller;
 import karlina.spbau.ru.project.R;
-import karlina.spbau.ru.project.storageClasses.ActivityStorage;
+import karlina.spbau.ru.project.storageClasses.SettingStorage;
 
-import static android.provider.MediaStore.Images.Thumbnails.getThumbnail;
+/**
+ * This class is representation of game activity.
+ * Contains button to control music and play greed.
+ */
 
 public class GameActivity extends AppCompatActivity {
-    private Bitmap bitmap;
-    private Bitmap imageBitmap;
-    private Canvas canvas;
-    private View myCanvasView;
-    private ActivityStorage storage = new ActivityStorage();
-    private ImageView imageView;
-    private MediaPlayer media = new MediaPlayer();
+    private SettingStorage storage;
+    private final MediaPlayer media = new MediaPlayer();
     private Controller controller;
-    private static boolean firstTime = true;
-    private final int Pick_image = 2;
+    private final int PICK_IMAGE = 2;
 
-
+    /**
+     * Method allow user to pick image and sets audio if it was chosen before
+     *
+     * @param savedInstanceState - to load previous data
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        storage.loadData(this.getIntent());
+        storage = new SettingStorage(this.getIntent());
 
         Intent imagePicker = new Intent(Intent.ACTION_PICK);
         imagePicker.setType("image/*");
-        startActivityForResult(imagePicker, Pick_image);
+        startActivityForResult(imagePicker, PICK_IMAGE);
 
-        media.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        try {
-            media.setDataSource(getApplicationContext(), storage.getAudioUri());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            media.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        media.start();
-        media.setLooping(true);
+        if (storage.getAudioUri() != null) {
+            media.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            try {
+                media.setDataSource(getApplicationContext(), storage.getAudioUri());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                media.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            media.start();
+            media.setLooping(true);
 
-        Switch switchButton = (Switch) findViewById(R.id.switch_button);
+            Switch switchButton = (Switch) findViewById(R.id.switch_button);
 
-        //Set a CheckedChange Listener for Switch Button
-        switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton cb, boolean on) {
-                if (on) {
-                    //Do something when Switch button is on/checked
-                    if (media != null && !media.isPlaying()) {
-                        media.start();
-                        media.setLooping(true);
-                    }
-                } else {
-                    //Do something when Switch is off/unchecked
-                    if (media != null && media.isPlaying()) {
-                        media.stop();
-                        media.release();
+            //Set a CheckedChange Listener for Switch Button
+            switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton cb, boolean on) {
+                    if (on) {
+                        //Do something when Switch button is on/checked
+                        if (media != null && !media.isPlaying()) {
+                            media.start();
+                            media.setLooping(true);
+                        }
+                    } else {
+                        //Do something when Switch is off/unchecked
+                        if (media != null && media.isPlaying()) {
+                            media.stop();
+                            media.release();
+                        }
                     }
                 }
-            }
-        });
-    }
-
-    public class MyCanvas extends View {
-        public MyCanvas(Context context) {
-            super(context);
-        }
-
-        @Override
-        protected void onDraw(Canvas canvas) {
-            // TODO Auto-generated method stub
-            super.onDraw(canvas);
-            /*
-            Paint pBackground = new Paint();
-            pBackground.setColor(Color.WHITE);
-            canvas.drawRect(0, 0, 512, 512, pBackground);
-            Paint pText = new Paint();
-            pText.setColor(Color.BLACK);
-            pText.setTextSize(20);
-            canvas.drawText("Sample Text", 100, 100, pText);
-            */
-            Rect rectangle = new Rect(0, 0, 100, 100);
-            //canvas.drawBitmap(imageBitmap, null, rectangle, null);
+            });
         }
     }
-/*
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        if (firstTime) {
-            //do anything you want here
-            myCanvasView = new MyCanvas(getApplicationContext());
-            bitmap = Bitmap.createBitmap(imageView.getWidth(), imageView.getHeight(), Bitmap.Config.ARGB_8888);
-            canvas = new Canvas(bitmap);
-            myCanvasView.draw(canvas);
-            //imageView.setImageBitmap(bitmap);
-            controller = new Controller(storage.getImageUri(), storage.getComplexity(), canvas);
-            firstTime = false;
-        }
-    }*/
 
-/*
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        bitmap.recycle();
-        bitmap = null;
-        media.release();
+    public static Bitmap getScaleBitmap(Bitmap bitmap, int x1, int y1, int x2, int y2) {
+
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(x1, y1, x2, y2);
+        final RectF rectF = new RectF(rect);
+        final float roundPx = 0;
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        return output;
     }
 
-    private void redraw() {
-        myCanvasView.draw(canvas);
-        imageView.setImageBitmap(bitmap);
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        super.dispatchTouchEvent(ev);
-        if (controller.touchAt(ev.getX(), ev.getY())) {
-            redraw();
-        }
-
-        return true;
-    } */
-
+    /**
+     * Starts when activity give a result
+     * Get image uri to make a bitmap
+     *
+     * @param requestCode    - code of what we need
+     * @param resultCode     - code of result
+     * @param returnedIntent - an intent
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent returnedIntent) {
         super.onActivityResult(requestCode, resultCode, returnedIntent);
 
         switch (requestCode) {
-            case Pick_image:
+            case PICK_IMAGE:
                 if (resultCode == RESULT_OK) {
                     Uri imageUri = returnedIntent.getData();
                     final InputStream imageStream;
-                    ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                    //ImageView imageView = (ImageView) findViewById(R.id.imageView);
                     try {
                         imageStream = getContentResolver().openInputStream(imageUri);
-                        bitmap = BitmapFactory.decodeStream(imageStream);
-                        imageView.setImageBitmap(bitmap);
+                        Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+                        controller = new Controller(storage.getComplexity(), bitmap, this);
+                        controller.Draw();
+//                        imageView.setImageBitmap(getScaleBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight()/2));
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
