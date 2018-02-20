@@ -2,7 +2,6 @@ package karlina.spbau.ru.project.storageClasses;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -10,28 +9,44 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 
 /**
- * Created by liuba on 28.12.17.
+ * This class is representation of puzzle play greed
+ * It contains array of puzzles with array size and size of each element(of puzzle).
  */
-
 public class Greed {
     private Puzzle greed[][];
     private int puzzleSize;
     private int greedSize;
 
+    /**
+     * Constructor that initialize all class fields
+     *
+     * @param count - greed size in puzzles
+     * @param greedS - greed size in pixels
+     */
     public Greed(int count, int greedS) {
         greedSize = count;
         puzzleSize = greedS / count;
+        //puzzleSize++;
         greed = new Puzzle[count][count];
 
         for (int i = 0; i < count; ++i)
             for (int j = 0; j < count; ++j) {
-                greed[i][j] = new Puzzle(count - j, count - i);
+                greed[i][j] = new Puzzle(count - j - 1, count - i - 1);
             }
     }
 
-    public Bitmap getImageBitmap(int viewI, int viewJ, Bitmap bitmap) {
-        int i = viewI * puzzleSize;
-        int j = viewJ * puzzleSize;
+    /**
+     * Method give a bitmap that is part of picture with given coordinate.
+     *
+     * @param first - first coordinate
+     * @param second - second coordinate
+     * @param bitmap - picture to create part of image bitmap
+     *
+     * @return Bitmap part of picture with given coordinates
+     */
+    public Bitmap getImageBitmap(int first, int second, Bitmap bitmap) {
+        int i = greed[first][second].getX() * puzzleSize;
+        int j = greed[first][second].getY() * puzzleSize;
 
         return getPartBitmap(bitmap, i, j, i + puzzleSize, j + puzzleSize);
     }
@@ -67,5 +82,4 @@ public class Greed {
 
         return output;
     }
-
 }

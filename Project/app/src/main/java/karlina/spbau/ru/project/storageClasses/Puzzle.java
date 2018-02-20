@@ -2,22 +2,40 @@ package karlina.spbau.ru.project.storageClasses;
 
 /**
  * This class is needed for representing a puzzle.
- * It contains expected puzzle location.
+ * It contains puzzle picture location.
  */
 
 class Puzzle {
-    private int expectedI;
-    private int expectedJ;
+    private int x;
+    private int y;
 
     /**
      * Class constructor
      *
-     * @param int correctX - first correct coordinate
-     * @param int correctY - second correct coordinate
+     * @param correctX - first correct coordinate
+     * @param correctY - second correct coordinate
      */
     public Puzzle(int correctX, int correctY) {
-        this.expectedI = correctX;
-        this.expectedJ = correctY;
+        x = correctX;
+        y = correctY;
+    }
+
+    /**
+     * Get puzzle first coordinate
+     *
+     * @return first coordinate
+     */
+    public int getX() {
+        return x;
+    }
+
+    /**
+     * Get puzzle second coordinate
+     *
+     * @return second coordinate
+     */
+    public int getY() {
+        return y;
     }
 
     /**
@@ -28,6 +46,6 @@ class Puzzle {
      * @return boolean if puzzle located on correct place
      */
     public boolean isCorrect(int i, int j){
-        return i == expectedI && j == expectedJ;
+        return i == x && j == y;
     }
 }

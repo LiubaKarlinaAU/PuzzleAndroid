@@ -22,7 +22,7 @@ public class SettingStorage {
     /**
      * Constructor that load data from given intent
      *
-     * @param Intent intent - to load data
+     * @param intent - to load data
      */
     public SettingStorage(Intent intent) {
         complexity = intent.getIntExtra(complexityKey, -1);
@@ -32,7 +32,7 @@ public class SettingStorage {
     /**
      * Set given complexity
      *
-     * @param int value - to be set
+     * @param value - to be set
      */
     public void setComlexity(int value) {
         complexity = value;
@@ -42,7 +42,7 @@ public class SettingStorage {
     /**
      * Set given uri
      *
-     * @param Uri uri  - to be set
+     * @param uri  - to be set
      */
     public void setAudioUri(Uri uri) {
         audioUri = uri;

@@ -10,26 +10,39 @@ import android.widget.RelativeLayout.LayoutParams;
 import karlina.spbau.ru.project.storageClasses.Greed;
 
 /**
- * Created by liuba on 15.11.17.
+ * This class is needed for managing all game.
+ * It contains picture(bitmap) and array of image views and puzzle greed.
  */
-
 public class Controller {
     private Bitmap bitmap;
     private Greed greed;
     private ImageView imageGreed[][];
 
-    public Controller(int count, Bitmap picture, Activity activity) {
+    /**
+     * Constructor that initialize correct all class fields
+     *
+     * @param sizeInPuzzle - to load data
+     * @param picture - picture to store for making puzzles
+     * @param activity - current activity to create image views array
+     */
+    public Controller(int sizeInPuzzle, Bitmap picture, Activity activity) {
         bitmap = picture;
-        imageGreed = new ImageView[count][count];
-        greed = new Greed(count, bitmap.getWidth());
+        imageGreed = new ImageView[sizeInPuzzle][sizeInPuzzle];
+        greed = new Greed(sizeInPuzzle, bitmap.getWidth());
         createImageViews(activity);
     }
 
+    /**
+     * Initialization of imageViews
+     * Creats layouts in given activity and image views in them
+     *
+     * @param activity - current activity to create there
+     */
     public void createImageViews(Activity activity) {
         LinearLayout layout = (LinearLayout) activity.findViewById(R.id.imageLayout);
         for (int i = 0; i < greed.getSize(); ++i) {
             LinearLayout currentLayout = new LinearLayout(activity);
-            LayoutParams currentLP = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams currentLP = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
             currentLayout.setLayoutParams(currentLP);
             layout.addView(currentLayout);
 
@@ -42,11 +55,16 @@ public class Controller {
         }
     }
 
+    /**
+     * Draw all image views from array use Greed method setImageBitmap
+     */
     public void Draw() {
         for (int i = 0; i < greed.getSize(); ++i)
             for (int j = 0; j < greed.getSize(); ++j)
                 imageGreed[i][j].setImageBitmap(greed.getImageBitmap(i, j, bitmap));
-
-        // imageGreed[3][3].setImageBitmap(greed.getImageBitmap(4, 4, bitmap));
+/*
+        imageGreed[1][1].setImageBitmap(greed.getImageBitmap(1, 1, bitmap));
+        imageGreed[0][1].setImageBitmap(greed.getImageBitmap(0, 1, bitmap));
+*/
     }
 }

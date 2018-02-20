@@ -92,28 +92,6 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    public static Bitmap getScaleBitmap(Bitmap bitmap, int x1, int y1, int x2, int y2) {
-
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-
-        final int color = 0xff424242;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(x1, y1, x2, y2);
-        final RectF rectF = new RectF(rect);
-        final float roundPx = 0;
-
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-
-        return output;
-    }
-
     /**
      * Starts when activity give a result
      * Get image uri to make a bitmap
@@ -131,13 +109,11 @@ public class GameActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     Uri imageUri = returnedIntent.getData();
                     final InputStream imageStream;
-                    //ImageView imageView = (ImageView) findViewById(R.id.imageView);
                     try {
                         imageStream = getContentResolver().openInputStream(imageUri);
                         Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
                         controller = new Controller(storage.getComplexity(), bitmap, this);
                         controller.Draw();
-//                        imageView.setImageBitmap(getScaleBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight()/2));
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
